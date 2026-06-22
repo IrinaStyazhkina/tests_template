@@ -4,7 +4,7 @@ export const clearCookie = async (name: string) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (window as any).cookieStore.delete('access_token')
     } catch (err) {
-      console.error('Ошибка удаления через Cookie Store API:', err)
+      console.error('Failed to delete via Cookie Store API:', err)
     }
   }
 }

@@ -6,7 +6,6 @@ from fastapi import APIRouter, Depends, HTTPException, Body
 
 from deps import get_user_service, auth
 from model.balance import Balance
-from model.chat import ChatWithMessages, Chat
 from model.transaction import Transaction
 from model.user import User
 from service.user_service import UserService
@@ -40,8 +39,8 @@ def add_money_to_balance(amount: float = Body(..., embed=True), user_service: Us
     try:
         user_service.add_money_to_balance(UUID(id_from_token), amount)
         return {"result": "ok"}
-    except ValueError:
-        raise HTTPException(400, "Не получилось пополнить баланс")
+    except ValueError as e:
+        raise HTTPException(400, str(e))
 
 @router.get(
     path="/transactions",
@@ -52,20 +51,21 @@ def get_user_transactions(user_service: UserService = Depends(get_user_service),
     id_from_token = payload.sub
     return user_service.get_user_transactions(UUID(id_from_token))
 
-@router.get(
-    path="/chats",
-    description="Получение всех чатов пользователя",
-    response_model=List[ChatWithMessages]
-)
-def get_user_chats(user_service: UserService = Depends(get_user_service), payload: TokenPayload = Depends(auth.access_token_required)):
-    id_from_token = payload.sub
-    return user_service.get_user_chats(id_from_token)
-
 @router.post(
-    path="/chats/create",
-    description="Создание чата",
-    response_model=Chat
+    path="/transfer",
+    description="Перевод по СБП",
 )
-def create_chat(title: str = Body(..., embed=True), user_service: UserService = Depends(get_user_service), payload: TokenPayload = Depends(auth.access_token_required)):
+def transfer(
+    phone: str = Body(...),
+    amount: float = Body(...),
+    purpose: str = Body(...),
+    user_service: UserService = Depends(get_user_service),
+    payload: TokenPayload = Depends(auth.access_token_required),
+):
     id_from_token = payload.sub
-    return user_service.create_chat(UUID(id_from_token), title)
+    try:
+        user_service.withdraw(UUID(id_from_token), amount, phone)
+        return {"result": "ok"}
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+

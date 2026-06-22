@@ -9,8 +9,6 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: Optional[str] = None
     POSTGRES_DB_NAME: Optional[str] = None
     JWT_SECRET_KEY: Optional[str] = None
-    RABBIT_MQ_USER: Optional[str] = None
-    RABBIT_MQ_PASSWORD: Optional[str] = None
 
     @property
     def DATABASE_URL_PSYCOPG(self):

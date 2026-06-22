@@ -1,1 +1,0 @@
-RESPONSE_COST = 1.0

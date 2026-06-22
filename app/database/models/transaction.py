@@ -2,7 +2,7 @@ from uuid import UUID
 
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, relationship
-from sqlalchemy.testing.schema import mapped_column
+from sqlalchemy.orm import mapped_column
 
 from database.database import Base
 from database.models.types import uuid_pk, created_dt, updated_dt

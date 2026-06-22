@@ -1,7 +1,7 @@
 from uuid import UUID
 from typing import List
 
-from sqlalchemy import select
+from sqlalchemy import select, desc
 from sqlalchemy.orm import selectinload
 
 from database.database import session_factory
@@ -33,7 +33,7 @@ class TransactionRepository:
 
     def get_transactions_by_user_id(self, user_id: UUID) -> List[Transaction]:
         with self._session() as session:
-            query = select(TransactionOrm).filter(TransactionOrm.user_id == user_id)
+            query = select(TransactionOrm).filter(TransactionOrm.user_id == user_id).order_by(desc(TransactionOrm.created_at))
             result = session.execute(query)
             raw_transactions = list(result.scalars().all())
             return [Transaction.model_validate(tr, from_attributes=True) for tr in raw_transactions]

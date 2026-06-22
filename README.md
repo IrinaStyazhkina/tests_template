@@ -1,93 +1,146 @@
-# ml_service_practice
+# F2F Bank — Test Assignment
 
+F2F Bank is a simple web application that simulates a peer-to-peer bank transfer service (SBP-style). Users can register, log in, top up their balance, and send money transfers by phone number.
 
+This repository is provided as a **test assignment**: your task is to write end-to-end (e2e) tests using [Playwright](https://playwright.dev/).
 
-## Getting started
+---
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Prerequisites
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Before you start, make sure the following tools are installed on your machine:
 
-## Add your files
+| Tool | Version | How to check |
+|------|---------|--------------|
+| [Docker Desktop](https://www.docker.com/products/docker-desktop/) | any recent | `docker --version` |
+| [Docker Compose](https://docs.docker.com/compose/) | v2+ | `docker compose version` |
+| [Node.js](https://nodejs.org/) | 18+ | `node --version` |
+| [Git](https://git-scm.com/) | any | `git --version` |
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+> **Windows users:** use PowerShell or Git Bash for all commands below.
 
+---
+
+## Running the Application
+
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd <repository-folder>
 ```
-cd existing_repo
-git remote add origin https://git.lab.karpov.courses/irina-stjazhkina-psm9559/ml_service_practice.git
-git branch -M master
-git push -uf origin master
+
+### 2. Start all services
+
+```bash
+docker compose up -d --build
 ```
 
-## Integrate with your tools
+This command builds and starts four containers:
+- **database** — PostgreSQL
+- **app** — Python/FastAPI backend (port 8080 internally)
+- **client** — Vue.js frontend (static build)
+- **web-proxy** — Nginx, serves everything on **http://localhost**
 
-- [ ] [Set up project integrations](https://git.lab.karpov.courses/irina-stjazhkina-psm9559/ml_service_practice/-/settings/integrations)
+The first build may take 2–5 minutes. Subsequent starts are faster.
 
-## Collaborate with your team
+### 3. Open the application
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+Go to **http://localhost** in your browser.
 
-## Test and Deploy
+You should see the F2F Bank login page.
 
-Use the built-in continuous integration in GitLab.
+### 4. Stop the application
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+```bash
+docker compose down
+```
 
-***
+To also delete the database data (full reset):
 
-# Editing this README
+```bash
+docker compose down -v
+```
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+---
 
-## Suggestions for a good README
+## Application Overview
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+Once running, the app provides the following functionality:
 
-## Name
-Choose a self-explaining name for your project.
+| Feature | URL | Description |
+|---------|-----|-------------|
+| Registration | `/register` | Create a new account (name, surname, email, password) |
+| Login | `/login` | Sign in with email and password |
+| Home / Transfer | `/` | Send a transfer by phone number, amount and purpose |
+| Transactions | `/transactions` | View transaction history; top up balance |
+| Profile | `/profile` | View your name, surname and email |
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+### Key validation rules
+- **Phone number:** must start with `+`, total 10–15 digits (spaces, dashes and parentheses are allowed). Example: `+7 999 123-45-67`
+- **Transfer amount:** must be greater than zero
+- **Balance:** must be sufficient for the transfer
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+---
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## Test Assignment
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+### Your task
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Write **end-to-end tests using Playwright** that cover the main user scenarios listed below.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+### Setup
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+Initialize a Playwright project inside the repository root (or a separate `tests/` folder):
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+```bash
+npm init playwright@latest
+```
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+Choose **TypeScript**, browser **Chromium** (minimum), and set `baseURL` to `http://localhost` in `playwright.config.ts`.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+### Scenarios to cover
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+Explore the application on your own and define the test scenarios yourself.
 
-## License
-For open source projects, say how it is licensed.
+For each scenario you identify:
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+1. **Describe** what is being tested (feature, input, expected result)
+2. **Assign a criticality level** — for example: `Critical`, `High`, `Medium`, `Low`
+3. **Implement** it as a Playwright test
+
+There is no single correct list — part of the task is to demonstrate your ability to analyse an application and prioritise what matters most.
+
+---
+
+### Tips
+
+- Each test that requires an authenticated user should log in at the start (or use `storageState` for reuse).
+- Use `beforeEach` / `beforeAll` for setup steps shared across tests in the same file.
+- Run tests with:
+
+```bash
+npx playwright test
+```
+
+Run with UI mode (visual, great for debugging):
+
+```bash
+npx playwright test --ui
+```
+
+Generate a report after the run:
+
+```bash
+npx playwright show-report
+```
+
+---
+
+### Deliverables
+
+Submit the following:
+
+1. All test files (e.g. `tests/*.spec.ts`)
+2. `playwright.config.ts`
+3. A brief description (in comments or a separate `NOTES.md`) of any bugs or unexpected behaviour you found during testing

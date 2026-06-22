@@ -17,7 +17,7 @@ def register_user(user: UserCreate, auth_service: AuthService = Depends(get_auth
     try:
         return auth_service.register_user(user)
     except EmailAlreadyExistsException:
-        raise HTTPException(400, "Пользователь с таким email уже существует в системе")
+        raise HTTPException(400, "User with this email already exists")
 
 
 @router.post(
@@ -30,13 +30,13 @@ def login_user(creds: UserLogin, response: Response, auth_service: AuthService =
       token = UserToken(token=auth_service.login_user(creds))
       response.set_cookie(auth_config.JWT_ACCESS_COOKIE_NAME, token.token)
       return token
-    except [UserNotFoundException, ValueError]:
-        raise HTTPException(401, "Не удалось авторизовать пользователя")
+    except (UserNotFoundException, ValueError):
+        raise HTTPException(401, "Invalid email or password")
 
 
 @router.get(path="/logout",
             description="Выход пользователя из системы",
             dependencies=[Depends(auth.access_token_required)])
 def logout(response: Response):
-    response.set_cookie(auth_config.JWT_ACCESS_COOKIE_NAME, "")
+    response.delete_cookie(auth_config.JWT_ACCESS_COOKIE_NAME)
     return {"result": "ok"}

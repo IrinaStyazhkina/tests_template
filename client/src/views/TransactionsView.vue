@@ -6,6 +6,9 @@ import type { Transaction } from '@/types/Transaction'
 import AddBalanceModal from '@/components/AddBalanceModal.vue'
 import apiClient from '@/api/api'
 import { showSnackbar } from '@/stores/snackbar'
+import { useUserStore } from '@/stores/userStore'
+
+const userStore = useUserStore()
 
 const transactions = ref<Transaction[]>([])
 
@@ -40,7 +43,7 @@ const addBalance = async (amount: number) => {
     amount,
   })
   if (response.data) {
-    loadTransactions()
+    await Promise.all([loadTransactions(), userStore.loadBalance()])
   }
 }
 

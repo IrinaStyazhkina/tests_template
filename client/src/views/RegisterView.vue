@@ -2,7 +2,9 @@
 import { ref } from 'vue'
 import AppButton from '@/components/AppButton.vue'
 import AppInput from '@/components/AppInput.vue'
-import axios from 'axios'
+import apiClient from '@/api/api'
+import { showSnackbar } from '@/stores/snackbar'
+import router from '@/router'
 
 const firstName = ref('')
 const surname = ref('')
@@ -18,21 +20,25 @@ const handleRegister = async () => {
     return
   }
 
-  const response = await axios.post('http://localhost/api/auth/register', {
-    name: firstName.value,
-    surname: surname.value,
-    email: email.value,
-    password: password.value,
-    role: 'user',
-  })
-
-  return await response.data
+  try {
+    await apiClient.post('/auth/register', {
+      name: firstName.value,
+      surname: surname.value,
+      email: email.value,
+      password: password.value,
+      role: 'user',
+    })
+    showSnackbar('Registration successful! Please log in.', 'success')
+    router.push('/login')
+  } catch (e: any) {
+    error.value = e?.response?.data?.detail ?? 'Registration failed'
+  }
 }
 </script>
 
 <template>
   <div class="register-container">
-    <h2>Register to ML Service</h2>
+    <h2>Register to F2F Bank</h2>
 
     <form @submit.prevent="handleRegister">
       <div class="form-group">

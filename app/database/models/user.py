@@ -22,6 +22,4 @@ class UserOrm(Base):
         back_populates="user",
     )
 
-    chats: Mapped[list["ChatOrm"]] = relationship(
-        back_populates="user"
-    )
+

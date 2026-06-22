@@ -26,7 +26,7 @@ const handleLogin = async () => {
     })
 
     if (response.status === 200) {
-      userStore.loadCurrentUser()
+      await userStore.loadCurrentUser()
       router.push('/')
     }
   } catch (e) {
@@ -38,18 +38,18 @@ const handleLogin = async () => {
 
 <template>
   <div class="login-container">
-    <h2>Login to ML Service</h2>
-    <h3>Here you can ask LLM everything you want. And maybe you'll get an answer</h3>
+    <h2>Login to F2F Bank</h2>
+    <h3>Fast transfers to your contacts — in just a few clicks</h3>
 
     <form @submit.prevent="handleLogin">
       <div class="form-group">
         <label>Email</label>
-        <AppInput type="email" v-model="email" required name="login" placeholder="Type your name" />
+        <AppInput type="email" v-model="email" required name="email" placeholder="Type your email" />
       </div>
 
       <div class="form-group">
         <label>Password</label>
-        <AppInput type="password" v-model="password" required name="Type your password" />
+        <AppInput type="password" v-model="password" required name="password" placeholder="Type your password" />
       </div>
       <AppButton type="submit"> Login </AppButton>
 

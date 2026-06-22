@@ -45,8 +45,11 @@ export const useUserStore = defineStore('user', {
       } catch (err) {
         showSnackbar('Failed to load balance')
         console.error(err)
-        this.profile = null
       }
+    },
+    async transfer(phone: string, amount: number, purpose: string) {
+      await apiClient.post('/users/transfer', { phone, amount, purpose })
+      await this.loadBalance()
     },
   },
 })

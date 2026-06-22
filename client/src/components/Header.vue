@@ -16,16 +16,15 @@ const logout = async () => {
 
 <template>
   <header class="header">
-    <div class="header__title-container">
-      <img alt="App logo" class="header__logo" src="@/assets/logo.svg" width="125" height="125" />
-      <h1 class="header__title">ML Service</h1>
-    </div>
+    <RouterLink to="/" class="header__title-container">
+      <img alt="App logo" class="header__logo" src="@/assets/logo.svg" width="60" height="60" />
+      <h1 class="header__title">F2F Bank</h1>
+    </RouterLink>
     <nav class="header__navigation" v-if="userStore.isExist">
       <h2 class="header__link">Balance: {{ userStore.balance.amount }}</h2>
       <RouterLink class="header__link" to="/">Main</RouterLink>
       <RouterLink class="header__link" to="/profile">Profile</RouterLink>
       <RouterLink class="header__link" to="/transactions">Transactions</RouterLink>
-      <RouterLink v-if="userStore.isAdmin" class="header__link" to="/admin">Admin Panel</RouterLink>
       <div class="header__link">
         <AppButton type="button" @click="logout">
           <LogoutIcon />
@@ -52,6 +51,9 @@ const logout = async () => {
 .header__title-container {
   display: flex;
   align-items: center;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
 
 h1 {

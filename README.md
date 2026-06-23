@@ -1,62 +1,62 @@
-# F2F Bank — Test Assignment
+# F2F Bank - Тестовое задание
 
-F2F Bank is a simple web application that simulates a peer-to-peer bank transfer service (SBP-style). Users can register, log in, top up their balance, and send money transfers by phone number.
+F2F Bank - простое веб-приложение, имитирующее сервис переводов между пользователями в стиле СБП. Пользователи могут регистрироваться, входить в систему, пополнять баланс и отправлять переводы по номеру телефона.
 
-This repository is provided as a **test assignment**: your task is to write end-to-end (e2e) tests using [Playwright](https://playwright.dev/).
+Этот репозиторий предоставляется как **тестовое задание**: ваша задача - написать end-to-end тесты с помощью [Playwright](https://playwright.dev/).
 
 ---
 
-## Prerequisites
+## Предварительные требования
 
-Before you start, make sure the following tools are installed on your machine:
+Перед началом работы убедитесь, что на вашем компьютере установлены следующие инструменты:
 
-| Tool | Version | How to check |
-|------|---------|--------------|
-| [Docker Desktop](https://www.docker.com/products/docker-desktop/) | any recent | `docker --version` |
+| Инструмент | Версия | Как проверить |
+|------------|--------|---------------|
+| [Docker Desktop](https://www.docker.com/products/docker-desktop/) | любая актуальная | `docker --version` |
 | [Docker Compose](https://docs.docker.com/compose/) | v2+ | `docker compose version` |
 | [Node.js](https://nodejs.org/) | 18+ | `node --version` |
-| [Git](https://git-scm.com/) | any | `git --version` |
+| [Git](https://git-scm.com/) | любая | `git --version` |
 
-> **Windows users:** use PowerShell or Git Bash for all commands below.
+> **Пользователям Windows:** используйте PowerShell или Git Bash для всех команд ниже.
 
 ---
 
-## Running the Application
+## Запуск приложения
 
-### 1. Clone the repository
+### 1. Клонируйте репозиторий
 
 ```bash
-git clone <repository-url>
-cd <repository-folder>
+git clone <ссылка-на-репозиторий>
+cd <папка-репозитория>
 ```
 
-### 2. Start all services
+### 2. Запустите все сервисы
 
 ```bash
 docker compose up -d --build
 ```
 
-This command builds and starts four containers:
-- **database** — PostgreSQL
-- **app** — Python/FastAPI backend (port 8080 internally)
-- **client** — Vue.js frontend (static build)
-- **web-proxy** — Nginx, serves everything on **http://localhost**
+Команда собирает и запускает четыре контейнера:
+- **database** - PostgreSQL
+- **app** - бэкенд на Python/FastAPI (порт 8080 внутри сети)
+- **client** - фронтенд на Vue.js (статическая сборка)
+- **web-proxy** - Nginx, раздает все на **http://localhost**
 
-The first build may take 2–5 minutes. Subsequent starts are faster.
+Первая сборка может занять 2–5 минут. Последующие запуски - быстрее.
 
-### 3. Open the application
+### 3. Откройте приложение
 
-Go to **http://localhost** in your browser.
+Перейдите по адресу **http://localhost** в браузере.
 
-You should see the F2F Bank login page.
+Вы должны увидеть страницу входа F2F Bank.
 
-### 4. Stop the application
+### 4. Остановка приложения
 
 ```bash
 docker compose down
 ```
 
-To also delete the database data (full reset):
+Полный сброс вместе с данными базы данных:
 
 ```bash
 docker compose down -v
@@ -64,72 +64,72 @@ docker compose down -v
 
 ---
 
-## Application Overview
+## Обзор приложения
 
-Once running, the app provides the following functionality:
+После запуска приложение предоставляет следующий функционал:
 
-| Feature | URL | Description |
-|---------|-----|-------------|
-| Registration | `/register` | Create a new account (name, surname, email, password) |
-| Login | `/login` | Sign in with email and password |
-| Home / Transfer | `/` | Send a transfer by phone number, amount and purpose |
-| Transactions | `/transactions` | View transaction history; top up balance |
-| Profile | `/profile` | View your name, surname and email |
+| Функция | URL | Описание |
+|---------|-----|----------|
+| Регистрация | `/register` | Создать аккаунт (имя, фамилия, email, пароль) |
+| Вход | `/login` | Войти по email и паролю |
+| Главная / Перевод | `/` | Отправить перевод по номеру телефона, сумме и назначению |
+| Транзакции | `/transactions` | История транзакций; пополнение баланса |
+| Профиль | `/profile` | Просмотр имени, фамилии и email |
 
-### Key validation rules
-- **Phone number:** must start with `+`, total 10–15 digits (spaces, dashes and parentheses are allowed). Example: `+7 999 123-45-67`
-- **Transfer amount:** must be greater than zero
-- **Balance:** must be sufficient for the transfer
+### Правила валидации
+- **Номер телефона:** должен начинаться с `+`, всего 10–15 цифр (пробелы, дефисы и скобки допускаются). Пример: `+7 999 123-45-67`
+- **Сумма перевода:** должна быть больше нуля
+- **Баланс:** должен быть достаточным для совершения перевода
 
 ---
 
-## Test Assignment
+## Тестовое задание
 
-### Your task
+### Ваша задача
 
-Write **end-to-end tests using Playwright** that cover the main user scenarios listed below.
+Напишите **end-to-end тесты с использованием Playwright**, покрывающие основные пользовательские сценарии.
 
-### Setup
+### Настройка
 
-Initialize a Playwright project inside the repository root (or a separate `tests/` folder):
+Инициализируйте проект Playwright в корне репозитория (или в отдельной папке `tests/`):
 
 ```bash
 npm init playwright@latest
 ```
 
-Choose **TypeScript**, browser **Chromium** (minimum), and set `baseURL` to `http://localhost` in `playwright.config.ts`.
+Выберите **TypeScript**, браузер **Chromium** (минимум) и укажите `baseURL: 'http://localhost'` в файле `playwright.config.ts`.
 
-### Scenarios to cover
+### Сценарии для покрытия
 
-Explore the application on your own and define the test scenarios yourself.
+Самостоятельно исследуйте приложение и определите тест-кейсы.
 
-For each scenario you identify:
+Для каждого выявленного сценария:
 
-1. **Describe** what is being tested (feature, input, expected result)
-2. **Assign a criticality level** — for example: `Critical`, `High`, `Medium`, `Low`
-3. **Implement** it as a Playwright test
+1. **Опишите** что тестируется (функциональность, входные данные, ожидаемый результат)
+2. **Присвойте уровень критичности** - например: `Критический`, `Высокий`, `Средний`, `Низкий`
+3. **Реализуйте** его как Playwright-тест
 
-There is no single correct list — part of the task is to demonstrate your ability to analyse an application and prioritise what matters most.
+Единственно верного списка не существует - часть задания состоит в том, чтобы продемонстрировать способность анализировать приложение и расставлять приоритеты.
 
 ---
 
-### Tips
+### Советы
 
-- Each test that requires an authenticated user should log in at the start (or use `storageState` for reuse).
-- Use `beforeEach` / `beforeAll` for setup steps shared across tests in the same file.
-- Run tests with:
+- Каждый тест, требующий авторизованного пользователя, должен выполнять вход в начале (или использовать `storageState` для переиспользования).
+- Используйте `beforeEach` / `beforeAll` для общих шагов настройки внутри одного файла.
+- Запуск тестов:
 
 ```bash
 npx playwright test
 ```
 
-Run with UI mode (visual, great for debugging):
+Запуск в UI-режиме (визуальный, удобен для отладки):
 
 ```bash
 npx playwright test --ui
 ```
 
-Generate a report after the run:
+Генерация отчета после прогона:
 
 ```bash
 npx playwright show-report
@@ -137,10 +137,8 @@ npx playwright show-report
 
 ---
 
-### Deliverables
+### Что нужно сдать
 
-Submit the following:
-
-1. All test files (e.g. `tests/*.spec.ts`)
+1. Все файлы с тестами (например, `tests/*.spec.ts`)
 2. `playwright.config.ts`
-3. A brief description (in comments or a separate `NOTES.md`) of any bugs or unexpected behaviour you found during testing
+3. Краткое описание (в комментариях или отдельном файле `NOTES.md`) найденных багов или неожиданного поведения приложения

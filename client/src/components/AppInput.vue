@@ -75,4 +75,27 @@ const onKeydown = (event: KeyboardEvent) => {
   border-color: #4a7a45;
   box-shadow: 0 0 6px rgba(74, 122, 69, 0.4);
 }
+
+@media (prefers-color-scheme: dark) {
+  .input {
+    color: #d4e8c8;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(160, 190, 120, 0.45);
+  }
+
+  .input::placeholder {
+    color: rgba(180, 215, 155, 0.55);
+  }
+
+  .input:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    border-color: rgba(160, 190, 120, 0.7);
+  }
+
+  .input:focus {
+    background-color: rgba(255, 255, 255, 0.14);
+    border-color: #7aaa70;
+    box-shadow: 0 0 6px rgba(122, 170, 112, 0.4);
+  }
+}
 </style>

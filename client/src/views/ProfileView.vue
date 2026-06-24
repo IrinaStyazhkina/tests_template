@@ -64,4 +64,15 @@ const userStore = useUserStore()
 .profile__info {
   text-align: left;
 }
+
+@media (prefers-color-scheme: dark) {
+  .profile {
+    background: transparent;
+  }
+
+  .profile__card {
+    background: #2a3828;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  }
+}
 </style>

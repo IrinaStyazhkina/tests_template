@@ -21,6 +21,81 @@ F2F Bank - простое веб-приложение, имитирующее с
 
 ---
 
+## Установка Docker на Windows (WSL 2)
+
+Docker Desktop на Windows работает через **WSL 2** (Windows Subsystem for Linux). Если вы видите ошибку `Docker Desktop - WSL not installed` — выполните шаги ниже.
+
+### Шаг 1. Включите WSL
+
+Откройте **PowerShell от имени администратора** (правая кнопка мыши → «Запуск от имени администратора») и выполните:
+
+```powershell
+wsl --install
+```
+
+Эта команда автоматически:
+- включит компонент WSL
+- установит Ubuntu как дистрибутив по умолчанию
+
+**Перезагрузите компьютер** после завершения установки.
+
+> Если команда `wsl --install` не работает (старая версия Windows), включите WSL вручную:
+> ```powershell
+> dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+> dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+> ```
+> После этого перезагрузитесь и установите WSL 2 kernel update:
+> [Скачать обновление ядра WSL 2](https://aka.ms/wsl2kernel)
+
+### Шаг 2. Установите WSL 2 как версию по умолчанию
+
+После перезагрузки снова откройте PowerShell **от имени администратора**:
+
+```powershell
+wsl --set-default-version 2
+```
+
+Проверьте, что WSL работает:
+
+```powershell
+wsl --list --verbose
+```
+
+Должны увидеть Ubuntu со статусом `Running` и версией `2`.
+
+### Шаг 3. Установите Docker Desktop
+
+1. Скачайте [Docker Desktop для Windows](https://www.docker.com/products/docker-desktop/)
+2. Запустите установщик и следуйте инструкциям
+3. На экране настройки убедитесь, что отмечен пункт **«Use WSL 2 instead of Hyper-V»**
+4. После установки **перезагрузите компьютер**
+
+### Шаг 4. Запустите Docker Desktop
+
+- Откройте Docker Desktop из меню «Пуск»
+- Дождитесь, пока в трее появится иконка Docker (кит) и статус сменится на **«Engine running»**
+- Только после этого выполняйте команды `docker compose`
+
+### Шаг 5. Проверьте установку
+
+```powershell
+docker --version
+docker compose version
+```
+
+Обе команды должны вернуть версию без ошибок. Если всё работает — переходите к разделу **«Запуск приложения»**.
+
+### Частые проблемы
+
+| Ошибка | Решение |
+|--------|---------|
+| `WSL not installed` | Выполните `wsl --install` в PowerShell **от администратора** и перезагрузитесь |
+| `Cannot connect to the Docker daemon` | Docker Desktop не запущен — откройте его из меню «Пуск» и дождитесь старта |
+| `Hardware assisted virtualization... is not enabled` | Включите виртуализацию в BIOS/UEFI (пункт Intel VT-x или AMD-V) |
+| После `wsl --install` Ubuntu не открывается | Установите Ubuntu вручную из [Microsoft Store](https://aka.ms/wslubuntu) |
+
+---
+
 ## Запуск приложения
 
 ### 1. Клонируйте репозиторий

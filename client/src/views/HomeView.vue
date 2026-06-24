@@ -262,4 +262,36 @@ const handleSubmit = async () => {
   font-size: 12px;
   color: #d32f2f;
 }
+
+@media (prefers-color-scheme: dark) {
+  .card {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .card-title {
+    color: #c8e0b8;
+  }
+
+  .balance-hint {
+    color: rgba(180, 215, 155, 0.7);
+  }
+
+  .form-group label {
+    color: #a8c890;
+  }
+
+  .success-text {
+    color: #c8e0b8;
+  }
+
+  .btn-outline {
+    color: #a8c890;
+    border-color: rgba(160, 190, 120, 0.6);
+  }
+
+  .btn-outline:hover {
+    background: rgba(160, 190, 120, 0.12);
+    border-color: rgba(160, 190, 120, 0.9);
+  }
+}
 </style>
